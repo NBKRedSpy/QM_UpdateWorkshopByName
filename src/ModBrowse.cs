@@ -3,6 +3,7 @@ using QM_UpdateWorkshopByName;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 [ConsoleCommand(new string[] { CommandName })]
 public class ModBrowse
@@ -14,7 +15,7 @@ public class ModBrowse
 
     public static string Help(string command, bool verbose)
     {
-        return $"Opens a browser to the mod's Steam Workshop page.  Usage: {CommandName} <unique mod name>.  Supports auto complete.";
+        return $"Opens a browser to the mod's Steam Workshop page.  Usage: {CommandName} <unique mod name> or <steam id>.  Supports auto complete.";
     }
 
     static ModBrowse()
@@ -28,18 +29,27 @@ public class ModBrowse
 
         if (modName == "")
         {
-            return "Requires the unique mod name to be provided";
+            return "Requires the unique mod name or Steam ID";
         }
 
-        //Find the mod
-        UserMod mod = UserMods.Values.FirstOrDefault(x => string.Compare(x.UniqueModName, modName, true) == 0);
+        ulong steamId;
 
-        if (mod == null)
+        //Check for steam ID
+        if(!ulong.TryParse(modName, out steamId))
         {
-            return $"Unable to find mod with the unique name of '{modName}'.";
+            //Find the mod
+            UserMod mod = UserMods.Values.FirstOrDefault(x => string.Compare(x.UniqueModName, modName, true) == 0);
+
+            if (mod == null)
+            {
+                return $"Unable to find mod with the unique name of '{modName}'.";
+            }
+
+            steamId = mod.SteamItemId;
+
         }
 
-        Process.Start($"https://steamcommunity.com/sharedfiles/filedetails/?id={mod.SteamItemId}");
+        Process.Start($"https://steamcommunity.com/sharedfiles/filedetails/?id={steamId}");
         return "done";
     }
 
@@ -59,7 +69,7 @@ public class ModBrowse
 
         List<string> results = modsFilter
             .Select(x => $"{CommandName} {x.UniqueModName}")
-        .ToList();
+            .ToList();
 
         return results;
 
