@@ -30,4 +30,4 @@ If you enjoy my mods and want to buy me a coffee, check out my [Ko-Fi](https://k
 Thanks!
 
 # Source Code
-Source code is available on GitHub at https://github.com/NBK_RedSpy/QM_UpdateWorkshopByName
+Source code is available on GitHub at https://github.com/NBKRedSpy/QM_UpdateWorkshopByName

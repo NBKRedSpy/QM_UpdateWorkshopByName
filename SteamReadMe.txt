@@ -30,4 +30,4 @@ Thanks!
 
 [h1]Source Code[/h1]
 
-Source code is available on GitHub at https://github.com/NBK_RedSpy/QM_UpdateWorkshopByName
+Source code is available on GitHub at https://github.com/NBKRedSpy/QM_UpdateWorkshopByName
