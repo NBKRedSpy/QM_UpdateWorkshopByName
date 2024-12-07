@@ -1,0 +1,7 @@
+{
+  "UniqueModName": "NBK_RedSpy_QM_UpdateWorkshopByName",
+  "Assemblies": [
+    "QM_UpdateWorkshopByName.dll"
+  ],
+  "Dependencies": []
+}
