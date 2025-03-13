@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
-[ConsoleCommand(new string[] { CommandName })]
+[ConsoleCommand(new string[] { CommandName, "mb" })]
 public class ModBrowse
 {
 
@@ -15,7 +15,7 @@ public class ModBrowse
 
     public static string Help(string command, bool verbose)
     {
-        return $"Opens a browser to the mod's Steam Workshop page.  Usage: {CommandName} <unique mod name> or <steam id>.  Supports auto complete.";
+        return $"Opens a browser to the mod's Steam Workshop page.  Usage: {CommandName} <unique mod name>, <steam id>, or -. Dash uses the last mod updated by {ModUpdateByName.CommandName}. Supports auto complete.";
     }
 
     static ModBrowse()
@@ -29,13 +29,22 @@ public class ModBrowse
 
         if (modName == "")
         {
-            return "Requires the unique mod name or Steam ID";
+            return $"Requires the unique mod name, Steam ID, or use '-' for the last updated mod using {ModUpdateByName.CommandName}";
         }
 
         ulong steamId;
 
+        if (modName == "-")
+        {
+            if (ModUpdateByName.LastUpdatedSteamId == null)
+            {
+                return $"No mods have been updated using {ModUpdateByName.CommandName}";
+            }
+
+            steamId = ModUpdateByName.LastUpdatedSteamId.Value;
+        }
         //Check for steam ID
-        if(!ulong.TryParse(modName, out steamId))
+        else if (!ulong.TryParse(modName, out steamId))
         {
             //Find the mod
             UserMod mod = UserMods.Values.FirstOrDefault(x => string.Compare(x.UniqueModName, modName, true) == 0);
@@ -46,7 +55,6 @@ public class ModBrowse
             }
 
             steamId = mod.SteamItemId;
-
         }
 
         Process.Start($"https://steamcommunity.com/sharedfiles/filedetails/?id={steamId}");
