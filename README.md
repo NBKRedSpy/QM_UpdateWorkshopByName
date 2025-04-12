@@ -7,6 +7,8 @@ Adds the following commands:
 `mod_updateworkshopitem <name>`: Updates a mod by name instead of by id and path.
 `mod_browse <name>`: Opens a browser to a mod by name.
 `mod_browse <Steam ID>`: Opens a browser to a mod by Steam ID
+`mod_browse -`: Opens a browser to the last mod that was updated with the `mod_updateworkshopitem` command.
+
 
 Usage:
 
@@ -14,6 +16,7 @@ Usage:
 mod_updatebyname foo_mod
 mod_browse foo_mod
 mod_browse 3378744839
+mod_browse -
 ```
 
 Behind the scenes, the `mod_updateworkshopitem` command invokes the game's `mod_updateworkshopitem` command, passing in the parameters for the selected mod.
@@ -34,6 +37,11 @@ Thanks!
 Source code is available on GitHub at https://github.com/NBKRedSpy/QM_UpdateWorkshopByName
 
 # Change Log
+
+## 1.2.0
+* Version 0.8.6 compatibility.
+* Added mb, mun aliases
+* Add - argument for mod_browse
 
 ## 1.1.0
 * Added browse by Steam ID.

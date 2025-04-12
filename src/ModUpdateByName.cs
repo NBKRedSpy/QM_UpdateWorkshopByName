@@ -7,13 +7,19 @@ using UnityEngine;
 
 namespace QM_UpdateWorkshopByName
 {
-    [ConsoleCommand(new string[] { CommandName })]
+    [ConsoleCommand(new string[] { CommandName, "mun" })]
     public class ModUpdateByName
     {
 
         private static UserMods UserMods { get; set; }
 
         public const string CommandName = "mod_updatebyname";
+
+        /// <summary>
+        /// The last mod's steam ID that was updated.
+        /// Used for the default of mod_browse if no arguments are provided.
+        /// </summary>
+        public static ulong? LastUpdatedSteamId { get; private set; } = null;
 
         public static string Help(string command, bool verbose)
         {
@@ -42,13 +48,24 @@ namespace QM_UpdateWorkshopByName
                 return $"Unable to find mod with the unique name of '{modName}'.";
             }
 
-            //Execute using the update workshop command
-            ConsoleDaemon consoleDaemon = ConsoleDaemon.Instance;
-
             UpdateSteamWorkshopItemCommand workshopCommand = new UpdateSteamWorkshopItemCommand();
 
-            return workshopCommand.Execute(new string[] {
-                mod.SteamItemId.ToString(), mod.ContentPath, "true" });
+            try
+            {
+
+                string result = workshopCommand.Execute(new string[] {
+                    mod.SteamItemId.ToString(), mod.ContentPath, "true" });
+
+                LastUpdatedSteamId = mod.SteamItemId;
+
+                return result;
+
+            }
+            catch (System.Exception)
+            {
+                LastUpdatedSteamId = null;
+                throw;
+            }
         }
 
         public static List<string> FetchAutocompleteOptions(string command, string[] tokens)
